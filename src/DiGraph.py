@@ -64,7 +64,7 @@ class DiGraph(GraphInteface):
         @return: True if the edge was added successfully, False o.w.
         Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
         """
-        if self.V[src] is not None and self.V[dst] is not None:
+        if src in self.V and dst in self.V and dst not in self.Ni_out[src]:
             e = EdgeData(src, dst, w)
             self.Ni_in[dst][src] = e
             self.Ni_out[src][dst] = e
@@ -73,20 +73,23 @@ class DiGraph(GraphInteface):
             return True
         return False
 
-    def add_node(self, node_id: int, pos: tuple = None) -> bool:
+    def add_node(self, key: int, pos: tuple = None) -> bool:
         """
         Adds a node to the graph.
-        @param node_id: The node ID
+        @param key: The node ID
         @param pos: The position of the node
         @return: True if the node was added successfully, False o.w.
 
         Note: if the node id already exists the node will not be added
         """
-        self.V[node_id] = NodeData(node_id, location=pos)
-        self.Ni_in[node_id] = {}
-        self.Ni_out[node_id] = {}
-        self.__mc += 1
-        self.__nodeSize += 1
+        if key not in self.V:
+            self.V[key] = NodeData(key, location=pos)
+            self.Ni_in[key] = {}
+            self.Ni_out[key] = {}
+            self.__mc += 1
+            self.__nodeSize += 1
+            return True
+        return False
 
     def remove_node(self, key: int) -> bool:
         """
@@ -98,14 +101,11 @@ class DiGraph(GraphInteface):
         """
         if key in self.V:
             for k in self.Ni_in.keys():
-                if self.Ni_in[k][key] is not None:
-                    print(k)
-            # for k in self.Ni_out.values():
-            #     self.Ni_out[k][key].clear()
-            # for k, v in self.Ni_in.items():
-            #     self.Ni_in = dict()filter()
-            # for k, v in self.Ni_out.items():
-            #     k.pop(key)
+                if key in self.Ni_in[k].keys():
+                    del self.Ni_in[k][key]
+            for k in self.Ni_out.keys():
+                if key in self.Ni_out[k].keys():
+                    del self.Ni_out[k][key]
             self.V.pop(key)
             self.Ni_in.pop(key)
             self.Ni_out.pop(key)
@@ -137,7 +137,8 @@ if __name__ == '__main__':
     g.add_edge(3, 1, 1)
     g.add_edge(4, 5, 1)
     g.add_edge(4, 2, 1)
-    g.add_edge(4, 3, 1)
+    g.add_edge(6, 3, 1)
+    g.add_edge(5, 0, 1)
     print(g.Ni_in)
     print(g.Ni_out)
     # g.all_out_edges_of_node(1).pop(2)

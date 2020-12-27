@@ -10,8 +10,8 @@ class DiGraph(GraphInteface):
 
     def __init__(self):
         self.V = dict()
-        self.E = dict()
-        self.Ni = dict()
+        self.Ni_out = dict()
+        self.Ni_in = dict()
         self.__nodeSize = 0
         self.__edgeSize = 0
         self.__mc = 0
@@ -35,16 +35,17 @@ class DiGraph(GraphInteface):
         """
         return self.V
 
-    def all_in_edges_of_node(self, id1: int) -> dict:
-        """return a dictionary of all the nodes connected to (into) node_id ,
+    def all_in_edges_of_node(self, dst: int) -> dict:
+        """return a dictionary of all the nodes connected to (into) dst ,
         each node is represented using a pair (key, weight)
          """
-        return self.E.get(id1)
+        return self.Ni_in.get(dst)
 
-    def all_out_edges_of_node(self, id1: int) -> dict:
-        """return a dictionary of all the nodes connected from node_id , each node is represented using a pair (key,
+    def all_out_edges_of_node(self, src: int) -> dict:
+        """return a dictionary of all the nodes connected from src , each node is represented using a pair (key,
         weight)
         """
+        return self.Ni_out.get(src)
 
     def get_mc(self) -> int:
         """
@@ -63,9 +64,10 @@ class DiGraph(GraphInteface):
         @return: True if the edge was added successfully, False o.w.
         Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
         """
-        if self.V[src] is not None:
-            self.E[src] = {dst: EdgeData(src, dst, w)}
-            self.Ni[src] = {dst: dict()}
+        if self.V[src] is not None and self.V[dst] is not None:
+            e = EdgeData(src, dst, w)
+            self.Ni_in[dst][src] = e
+            self.Ni_out[src][dst] = e
             self.__mc += 1
             self.__edgeSize += 1
             return True
@@ -81,62 +83,67 @@ class DiGraph(GraphInteface):
         Note: if the node id already exists the node will not be added
         """
         self.V[node_id] = NodeData(node_id, location=pos)
-        self.Ni[node_id] = {node_id: dict()}
+        self.Ni_in[node_id] = {}
+        self.Ni_out[node_id] = {}
+        self.__mc += 1
+        self.__nodeSize += 1
 
-    def remove_node(self, node_id: int) -> bool:
+    def remove_node(self, key: int) -> bool:
         """
         Removes a node from the graph.
-        @param node_id: The node ID
+        @param key: The node ID
         @return: True if the node was removed successfully, False o.w.
 
         Note: if the node id does not exists the function will do nothing
         """
+        if key in self.V:
+            for k in self.Ni_in.keys():
+                if self.Ni_in[k][key] is not None:
+                    print(k)
+            # for k in self.Ni_out.values():
+            #     self.Ni_out[k][key].clear()
+            # for k, v in self.Ni_in.items():
+            #     self.Ni_in = dict()filter()
+            # for k, v in self.Ni_out.items():
+            #     k.pop(key)
+            self.V.pop(key)
+            self.Ni_in.pop(key)
+            self.Ni_out.pop(key)
+            return True
+        return False
 
-    def remove_edge(self, node_id1: int, node_id2: int) -> bool:
+    def remove_edge(self, src: int, dst: int) -> bool:
         """
         Removes an edge from the graph.
-        @param node_id1: The start node of the edge
-        @param node_id2: The end node of the edge
+        @param src: The start node of the edge
+        @param dst: The end node of the edge
         @return: True if the edge was removed successfully, False o.w.
 
         Note: If such an edge does not exists the function will do nothing
         """
+        self.all_out_edges_of_node(src).pop(dst)
+        self.all_in_edges_of_node(dst).pop(src)
 
 
 if __name__ == '__main__':
-    # a = dict()
-    # src = 5
-    # dst = 8
-    # w = 3.5
-    # a[src] = {dst: EdgeData(src, dst, w)}
-    # # a[1][4] = {1: 4}
-    # print(a)
-    # print(a[src][dst])
-    #
-    # e = EdgeData(4, 2, 3.4)
-    # print(e)
-    # # e = EdgeData(2, 3.4)
-    # n = NodeData(3)
-    # print(n)
-    # n = NodeData(3, info="d")
-    # print(n)
-    # n = NodeData(key=3, tag=4, info="k", location=GeoLocation(3, 5, 2))
-    # print(n)
-    # n.weight = 3.5
-    # # n = NodeData(3)
-    # print(n)
+    g = DiGraph()
+    for i in range(6):
+        g.add_node(i)
+    g.add_edge(1, 2, 1)
+    g.add_edge(1, 3, 1)
+    g.add_edge(1, 4, 1)
+    g.add_edge(2, 1, 1)
+    g.add_edge(2, 5, 1)
+    g.add_edge(3, 1, 1)
+    g.add_edge(4, 5, 1)
+    g.add_edge(4, 2, 1)
+    g.add_edge(4, 3, 1)
+    print(g.Ni_in)
+    print(g.Ni_out)
+    # g.all_out_edges_of_node(1).pop(2)
+    # g.all_in_edges_of_node(2).pop(1)
+    # g.remove_edge(1, 2)
+    g.remove_node(1)
+    print(g.Ni_in)
+    print(g.Ni_out)
 
-    graph = DiGraph()
-    graph.add_node(4)
-    graph.add_node(19)
-    graph.add_node(23)
-    graph.add_node(5)
-    graph.add_node(1)
-    print(graph.get_all_v())
-    print(graph.all_in_edges_of_node(1))
-
-    graph.add_edge(4, 1, 1)
-    graph.add_edge(1, 4, 3.4)
-    graph.add_edge(1, 5, 2.7)
-    graph.add_edge(1, 23, 1.4)
-    print(graph.all_in_edges_of_node(1))

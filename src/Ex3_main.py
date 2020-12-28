@@ -8,8 +8,8 @@ def check():
         Make sure you run this example to check your naming.
         """
     check0()
-    check1()
-    check2()
+    # check1()
+    # check2()
 
 
 def check0():

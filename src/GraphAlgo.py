@@ -1,16 +1,21 @@
+import json
 from typing import List
 
+from DiGraph import DiGraph
 from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
 
 
 class GraphAlgo(GraphAlgoInterface):
-    """This abstract class represents an interface of a graph."""
+
+    def __init__(self):
+        self.graph = DiGraph()
 
     def get_graph(self) -> GraphInterface:
         """
-        :return: the directed graph on which the algorithm works on.
+        @return: the directed graph on which the algorithm works on.
         """
+        return self.graph
 
     def load_from_json(self, file_name: str) -> bool:
         """
@@ -18,7 +23,13 @@ class GraphAlgo(GraphAlgoInterface):
         @param file_name: The path to the json file
         @returns True if the loading was successful, False o.w.
         """
-        raise NotImplementedError
+        with open(file_name) as f:
+            s = json.load(f)
+        for node in s["Nodes"]:
+            a = tuple(map(float, str(node["pos"]).split(",")))
+            self.graph.add_node(node["id"], a)
+        for edge in s["Edges"]:
+            self.graph.add_edge(edge["src"], edge["dest"], edge["w"])
 
     def save_to_json(self, file_name: str) -> bool:
         """
@@ -26,7 +37,6 @@ class GraphAlgo(GraphAlgoInterface):
         @param file_name: The path to the out file
         @return: True if the save was successful, Flase o.w.
         """
-        raise NotImplementedError
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         """
@@ -51,7 +61,6 @@ class GraphAlgo(GraphAlgoInterface):
         More info:
         https://en.wikipedia.org/wiki/Dijkstra's_algorithm
         """
-        raise NotImplementedError
 
     def connected_component(self, id1: int) -> list:
         """
@@ -59,14 +68,12 @@ class GraphAlgo(GraphAlgoInterface):
         @param id1: The node id
         @return: The list of nodes in the SCC
         """
-        raise NotImplementedError
 
     def connected_components(self) -> List[list]:
         """
         Finds all the Strongly Connected Component(SCC) in the graph.
         @return: The list all SCC
         """
-        raise NotImplementedError
 
     def plot_graph(self) -> None:
         """
@@ -75,4 +82,3 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
-        raise NotImplementedError

@@ -124,27 +124,18 @@ class DiGraph(GraphInteface):
         self.all_out_edges_of_node(src).pop(dst)
         self.all_in_edges_of_node(dst).pop(src)
 
+    def __repr__(self):
+        s = "|V|={} , |E|={} , MC={}\n".format(self.__nodeSize, self.__edgeSize, self.__mc)
+        for key in self.V.keys():
+            s += "{}:".format(key)
+            s += "\t To:\t"
+            for e in self.all_in_edges_of_node(key).values():
+                s += str(e)
+            s += "\n"
+            s += "\t from:\t"
+            for e in self.all_out_edges_of_node(key).values():
+                s += str(e)
+            s += "\n"
+        return s
 
-if __name__ == '__main__':
-    g = DiGraph()
-    for i in range(6):
-        g.add_node(i)
-    g.add_edge(1, 2, 1)
-    g.add_edge(1, 3, 1)
-    g.add_edge(1, 4, 1)
-    g.add_edge(2, 1, 1)
-    g.add_edge(2, 5, 1)
-    g.add_edge(3, 1, 1)
-    g.add_edge(4, 5, 1)
-    g.add_edge(4, 2, 1)
-    g.add_edge(6, 3, 1)
-    g.add_edge(5, 0, 1)
-    print(g.Ni_in)
-    print(g.Ni_out)
-    # g.all_out_edges_of_node(1).pop(2)
-    # g.all_in_edges_of_node(2).pop(1)
-    # g.remove_edge(1, 2)
-    g.remove_node(1)
-    print(g.Ni_in)
-    print(g.Ni_out)
 

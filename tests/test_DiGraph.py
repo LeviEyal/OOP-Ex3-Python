@@ -25,16 +25,13 @@ class Test(TestCase):
 
     def test_v_size(self):
         self.assertEqual(6, self.g.v_size())
-
         # adding a new node:
         self.assertTrue(self.g.add_node(7))
         self.assertEqual(7, self.g.v_size())
-
         # adding already inside nodes:
         for i in range(6):
             self.assertFalse(self.g.add_node(i))
         self.assertEqual(7, self.g.v_size())
-
         # adding 3 new nodes (#6, #8, #9):
         for i in range(6, 10):
             self.g.add_node(i)
@@ -42,7 +39,6 @@ class Test(TestCase):
 
     def test_e_size(self):
         self.assertEqual(8, self.g.e_size())
-
         # adding old edge - shouldn't update it
         self.assertFalse(self.g.add_edge(1, 2, 3.5))
         self.assertEqual(8, self.g.e_size())

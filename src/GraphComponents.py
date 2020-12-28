@@ -7,7 +7,7 @@ class EdgeData(object):
         self.tag = 0
 
     def __repr__(self):
-        return "({},{})w:{} ".format(self.src, self.dst, self.weight)
+        return "({}->{})w:{:.3} ".format(self.src, self.dst, self.weight)
 
 
 class GeoLocation(object):
@@ -31,9 +31,9 @@ class NodeData(object):
         self.key = key
         self.tag = tag
         self.info = info
-        self.location = location
+        self.location = GeoLocation(location[0], location[1], location[2])
         self.weight = weight
 
     def __repr__(self):
         # return "#{} tag:{} info:{} location:{} weight:{}".format(self.key, self.tag, self.info, self.location, self.weight)
-        return "#{} ".format(self.key)
+        return "#{} pos:{} ".format(self.key, self.location)

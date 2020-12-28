@@ -6,7 +6,6 @@ import pprint
 
 
 class DiGraph(GraphInteface):
-    """This abstract class represents an interface of a graph."""
 
     def __init__(self):
         self.V = dict()
@@ -73,17 +72,17 @@ class DiGraph(GraphInteface):
             return True
         return False
 
-    def add_node(self, key: int, pos: tuple = None) -> bool:
+    def add_node(self, key: int, position: tuple = None) -> bool:
         """
         Adds a node to the graph.
         @param key: The node ID
-        @param pos: The position of the node
+        @param position: The position of the node
         @return: True if the node was added successfully, False o.w.
 
         Note: if the node id already exists the node will not be added
         """
         if key not in self.V:
-            self.V[key] = NodeData(key, location=pos)
+            self.V[key] = NodeData(key, pos=position)
             self.Ni_in[key] = {}
             self.Ni_out[key] = {}
             self.__mc += 1
@@ -127,7 +126,7 @@ class DiGraph(GraphInteface):
     def __repr__(self):
         s = "|V|={} , |E|={} , MC={}\n".format(self.__nodeSize, self.__edgeSize, self.__mc)
         for key in self.V.keys():
-            s += "{}:".format(key)
+            s += "{}:\n".format(self.V[key])
             s += "\t To:\t"
             for e in self.all_in_edges_of_node(key).values():
                 s += str(e)

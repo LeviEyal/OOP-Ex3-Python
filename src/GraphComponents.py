@@ -3,21 +3,26 @@ class EdgeData(object):
     def __init__(self, src, dst, w):
         self.src = src
         self.dst = dst
-        self.weight = w
+        self.w = w
         self.tag = 0
 
     def __repr__(self):
-        return "({}->{})w:{:.3} ".format(self.src, self.dst, self.weight)
+        return "({}->{})w:{} ".format(self.src, self.dst, self.w)
 
 
 class GeoLocation(object):
-    def __init__(self, x=0, y=0, z=0):
-        self.x = x
-        self.y = y
-        self.z = z
+    def __init__(self, pos=None):
+        self.pos = pos
+        if pos is not None:
+            self.x = pos[0]
+            self.y = pos[1]
+            self.z = pos[2]
 
     def __repr__(self):
-        return "({},{},{})".format(self.x, self.y, self.z)
+        if self.pos is not None:
+            return "{},{},{}".format(self.x, self.y, self.z)
+        else:
+            return "None"
 
     def distance(self, other):
         t1 = (self.x - other.x) ** 2
@@ -27,13 +32,15 @@ class GeoLocation(object):
 
 
 class NodeData(object):
-    def __init__(self, key: int, tag=0, info="", location=GeoLocation(), weight=1):
+    def __init__(self, key: int, tag=0, info="", pos=None, weight=1):
         self.key = key
         self.tag = tag
         self.info = info
-        self.location = GeoLocation(location[0], location[1], location[2])
         self.weight = weight
+        if pos is not None:
+            self.position = GeoLocation(pos)
+        else:
+            self.position = None
 
     def __repr__(self):
-        # return "#{} tag:{} info:{} location:{} weight:{}".format(self.key, self.tag, self.info, self.location, self.weight)
-        return "#{} pos:{} ".format(self.key, self.location)
+        return "#{} pos:{}".format(self.key, self.position)

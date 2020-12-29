@@ -65,8 +65,29 @@ class TestGraphAlgo(TestCase):
     # def test_connected_component(self):
     #     self.fail()
     #
-    # def test_connected_components(self):
-    #     self.fail()
-    #
+    def test_connected_components(self):
+        g = DiGraph()
+        for i in range(1, 9):
+            g.add_node(i)
+        g.add_edge(1, 2, 1)
+        g.add_edge(2, 3, 1)
+        g.add_edge(3, 4, 1)
+        g.add_edge(4, 8, 1)
+        g.add_edge(8, 4, 1)
+        g.add_edge(4, 3, 1)
+        g.add_edge(8, 7, 1)
+        g.add_edge(6, 7, 1)
+        g.add_edge(7, 6, 1)
+        g.add_edge(2, 6, 1)
+        g.add_edge(5, 6, 1)
+        g.add_edge(2, 5, 1)
+        g.add_edge(5, 1, 1)
+        g.add_edge(5, 6, 1)
+        self.ga.graph = g
+        sccs = self.ga.connected_components()
+        self.assertEqual([[7, 6], [3, 4, 8], [2, 1, 5]], sccs)
+
+
     # def test_plot_graph(self):
     #     self.fail()
+

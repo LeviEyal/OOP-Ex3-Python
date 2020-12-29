@@ -8,8 +8,8 @@ def check():
         Make sure you run this example to check your naming.
         """
     check0()
-    # check1()
-    # check2()
+    check1()
+    check2()
 
 
 def check0():
@@ -17,6 +17,8 @@ def check0():
     This function tests the naming (main methods of the DiGraph class, as defined in GraphInterface.
     :return:
     """
+    print("\n============= Check 0: ==============\n")
+
     g = DiGraph()  # creates an empty directed graph
     for n in range(4):
         g.add_node(n)
@@ -38,6 +40,8 @@ def check1():
        This function tests the naming (main methods of the GraphAlgo class, as defined in GraphAlgoInterface.
     :return:
     """
+    print("\n============= Check 1: ==============\n")
+
     g_algo = GraphAlgo()  # init an empty graph - for the GraphAlgo
     file = "../data/T0.json"
     g_algo.load_from_json(file)  # init a GraphAlgo from a json file
@@ -52,6 +56,7 @@ def check2():
     """ This function tests the naming, basic testing over A5 json file.
       :return:
       """
+    print("\n============= Check 2: ==============\n")
     g_algo = GraphAlgo()
     file = '../data/A5'
     g_algo.load_from_json(file)
@@ -63,8 +68,8 @@ def check2():
     print(dist, path)
     dist, path = g_algo.shortest_path(20, 2)
     print(dist, path)
-    dist, path = g_algo.shortest_path(2, 20)
-    print(dist, path)
+    # dist, path = g_algo.shortest_path(2, 20)
+    # print(dist, path)
     print(g_algo.connected_component(0))
     print(g_algo.connected_components())
     g_algo.plot_graph()

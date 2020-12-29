@@ -1,21 +1,14 @@
-import heapq
 import json
 import math
-import queue
-from random import random
 from typing import List
 from queue import PriorityQueue
 
 from DiGraph import DiGraph
-from GraphComponents import NodeData
 from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
 
 NOT_VISITED = 0
 VISITED = 1
-
-
-
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -29,6 +22,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         return self.graph
 
+# =========================================================================================
     def load_from_json(self, file_name: str) -> bool:
         """
         Loads a graph from a json file.
@@ -56,6 +50,7 @@ class GraphAlgo(GraphAlgoInterface):
         finally:
             f.close()
 
+# =========================================================================================
     def save_to_json(self, file_name: str) -> bool:
         """
         Saves the graph in JSON format to a file
@@ -82,6 +77,7 @@ class GraphAlgo(GraphAlgoInterface):
             finally:
                 f.close()
 
+# =========================================================================================
     def shortest_path(self, src: int, dst: int) -> (float, list):
         """
         Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
@@ -134,6 +130,7 @@ class GraphAlgo(GraphAlgoInterface):
         path.reverse()
         return nodes[dst].tag, path
 
+# =========================================================================================
     def connected_component(self, key: int) -> list:
         """
         Finds the Strongly Connected Component(SCC) that node id1 is a part of.
@@ -141,6 +138,7 @@ class GraphAlgo(GraphAlgoInterface):
         @return: The list of nodes in the SCC
         """
 
+# =========================================================================================
     def connected_components(self) -> List[list]:
         """
         Finds all the Strongly Connected Component(SCC) in the graph.
@@ -175,6 +173,11 @@ class GraphAlgo(GraphAlgoInterface):
                 self.DFS(self.graph.V[n].key, finish)
         finish.append(key)
 
+    def set_all_tags(self, t):
+        for n in self.graph.get_all_v().values():
+            n.tag = t
+
+# =========================================================================================
     def plot_graph(self) -> None:
         """
         Plots the graph.
@@ -182,24 +185,3 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
-
-    def set_all_tags(self, t):
-        for n in self.graph.get_all_v().values():
-            n.tag = t
-
-
-if __name__ == '__main__':
-    qu = []
-    for i in range(20):
-        qu.append(i)
-
-    while qu:
-        print(qu.pop())
-
-    # qu = PriorityQueue()
-    # for i in range(20):
-    #     qu.put((random(), NodeData(i)))
-    #
-    # while not qu.empty():
-    #     print(qu.get())
-    # print("finished")

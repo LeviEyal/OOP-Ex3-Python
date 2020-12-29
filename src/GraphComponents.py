@@ -1,12 +1,12 @@
-class EdgeData(object):
-    def __init__(self, src, dst, w):
-        self.src = src
-        self.dst = dst
-        self.w = w
-        self.tag = 0
-
-    def __repr__(self):
-        return "({}->{})w:{} ".format(self.src, self.dst, self.w)
+# class EdgeData(object):
+#     def __init__(self, src, dst, w):
+#         self.src = src
+#         self.dst = dst
+#         self.w = w
+#         self.tag = 0
+#
+#     def __repr__(self):
+#         return "({}->{})w:{} ".format(self.src, self.dst, self.w)
 
 
 class GeoLocation(object):

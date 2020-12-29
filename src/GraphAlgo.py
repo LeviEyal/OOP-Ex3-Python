@@ -1,13 +1,21 @@
 import heapq
 import json
 import math
+import queue
 from random import random
 from typing import List
+from queue import PriorityQueue
 
 from DiGraph import DiGraph
 from GraphComponents import NodeData
 from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
+
+NOT_VISITED = 0
+VISITED = 1
+
+
+
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -58,8 +66,8 @@ class GraphAlgo(GraphAlgoInterface):
             try:
                 d = {"Nodes": [], "Edges": []}
                 for src in self.graph.Ni_out.keys():
-                    for dst, edge in self.graph.all_out_edges_of_node(src).items():
-                        d["Edges"].append({"src": src, "w": edge.w, "dest": dst})
+                    for dst, w in self.graph.all_out_edges_of_node(src).items():
+                        d["Edges"].append({"src": src, "w": w, "dest": dst})
 
                 for node in self.graph.V.values():
                     if node.position is not None:
@@ -69,7 +77,7 @@ class GraphAlgo(GraphAlgoInterface):
                 json.dump(d, f, ensure_ascii=False, indent=4)
                 return True
             except Exception as e:
-                print(e)
+                print("Error save to Json: " + e.__repr__())
                 return False
             finally:
                 f.close()
@@ -100,20 +108,20 @@ class GraphAlgo(GraphAlgoInterface):
         nodes = self.graph.get_all_v()
         if src not in nodes or dst not in nodes:
             return None
-        q = []
+        q = PriorityQueue()
         prev = {}
-        heapq.heappush(q, nodes[src])
+        q.put(nodes[src])
         prev[src] = -1
         for n in nodes.values():
             n.tag = math.inf
         nodes[src].tag = 0
-        while q:
-            v = heapq.heappop(q)
+        while not q.empty():
+            v = q.get()
             for k, w in self.graph.all_out_edges_of_node(v.key).items():
                 n = nodes[k]
                 weight_from_src = v.tag + w
                 if weight_from_src < n.tag:
-                    heapq.heappush(q, n)
+                    q.put(n)
                     n.tag = weight_from_src
                     prev[n.key] = v.key
         if nodes[dst].tag == math.inf:
@@ -126,10 +134,10 @@ class GraphAlgo(GraphAlgoInterface):
         path.reverse()
         return nodes[dst].tag, path
 
-    def connected_component(self, id1: int) -> list:
+    def connected_component(self, key: int) -> list:
         """
         Finds the Strongly Connected Component(SCC) that node id1 is a part of.
-        @param id1: The node id
+        @param key: The node id
         @return: The list of nodes in the SCC
         """
 
@@ -138,6 +146,34 @@ class GraphAlgo(GraphAlgoInterface):
         Finds all the Strongly Connected Component(SCC) in the graph.
         @return: The list all SCC
         """
+        sccs = []
+        finish = []
+        self.set_all_tags(NOT_VISITED)
+
+        for k in self.graph.get_all_v().keys():
+            if self.graph.V[k].tag == NOT_VISITED:
+                self.DFS(k, finish)
+
+        self.set_all_tags(NOT_VISITED)
+        finish.reverse()
+        while finish:
+            k = finish.pop()
+            if self.graph.V[k].tag == NOT_VISITED:
+                t = []
+                self.DFS(k, t)
+                sccs.append(t)
+        print(sccs)
+        return sccs
+
+    def DFS(self, key, finish):
+        """
+        Recursive DFS traverse algorithm
+        """
+        self.graph.V[key].tag = VISITED
+        for n in self.graph.all_out_edges_of_node(key):
+            if self.graph.V[n].tag == NOT_VISITED:
+                self.DFS(self.graph.V[n].key, finish)
+        finish.append(key)
 
     def plot_graph(self) -> None:
         """
@@ -147,12 +183,23 @@ class GraphAlgo(GraphAlgoInterface):
         @return: None
         """
 
+    def set_all_tags(self, t):
+        for n in self.graph.get_all_v().values():
+            n.tag = t
+
 
 if __name__ == '__main__':
     qu = []
     for i in range(20):
-        heapq.heappush(qu, NodeData(i, random()))
+        qu.append(i)
 
     while qu:
-        print(heapq.heappop(qu))
+        print(qu.pop())
 
+    # qu = PriorityQueue()
+    # for i in range(20):
+    #     qu.put((random(), NodeData(i)))
+    #
+    # while not qu.empty():
+    #     print(qu.get())
+    # print("finished")

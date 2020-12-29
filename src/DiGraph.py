@@ -65,8 +65,8 @@ class DiGraph(GraphInteface):
         """
         if src in self.V and dst in self.V and dst not in self.Ni_out[src]:
             e = EdgeData(src, dst, w)
-            self.Ni_in[dst][src] = e
-            self.Ni_out[src][dst] = e
+            self.Ni_in[dst][src] = w
+            self.Ni_out[src][dst] = w
             self.__mc += 1
             self.__edgeSize += 1
             return True
@@ -128,12 +128,12 @@ class DiGraph(GraphInteface):
         for key in self.V.keys():
             s += "{}:\n".format(self.V[key])
             s += "\t To:\t"
-            for e in self.all_in_edges_of_node(key).values():
-                s += str(e)
+            for w in self.all_in_edges_of_node(key).values():
+                s += str(w)
             s += "\n"
             s += "\t from:\t"
-            for e in self.all_out_edges_of_node(key).values():
-                s += str(e)
+            for w in self.all_out_edges_of_node(key).values():
+                s += str(w)
             s += "\n"
         return s
 

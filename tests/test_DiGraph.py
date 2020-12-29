@@ -47,8 +47,11 @@ class Test(TestCase):
         d = {0: NodeData(0), 1: NodeData(1), 2: NodeData(2), 3: NodeData(3), 4: NodeData(4), 5: NodeData(5)}
         self.assertEqual(d.__repr__(), self.g.get_all_v().__repr__())
 
-    # def test_all_in_edges_of_node(self):
-    #     self.fail()
+    def test_all_in_edges_of_node(self):
+        print(self.g.all_in_edges_of_node(1))
+        print(self.g.all_in_edges_of_node(2))
+        print(self.g.all_in_edges_of_node(3))
+        print(self.g.all_in_edges_of_node(4))
     #
     # def test_all_out_edges_of_node(self):
     #     self.fail()

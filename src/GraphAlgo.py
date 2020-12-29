@@ -1,7 +1,11 @@
+import heapq
 import json
+import math
+from random import random
 from typing import List
 
 from DiGraph import DiGraph
+from GraphComponents import NodeData
 from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
 
@@ -71,11 +75,11 @@ class GraphAlgo(GraphAlgoInterface):
             finally:
                 f.close()
 
-    def shortest_path(self, id1: int, id2: int) -> (float, list):
+    def shortest_path(self, src: int, dst: int) -> (float, list):
         """
         Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
-        @param id1: The start node id
-        @param id2: The end node id
+        @param src: The start node id
+        @param dst: The end node id
         @return: The distance of the path, the path as a list
 
         Example:
@@ -94,6 +98,34 @@ class GraphAlgo(GraphAlgoInterface):
         More info:
         https://en.wikipedia.org/wiki/Dijkstra's_algorithm
         """
+        nodes = self.graph.get_all_v()
+        if src not in nodes or dst not in nodes:
+            return None
+        q = []
+        prev = {}
+        heapq.heappush(q, nodes[src])
+        prev[src] = -1
+        for n in nodes.values():
+            n.tag = math.inf
+        nodes[src].tag = 0
+        while q:
+            v = heapq.heappop(q)
+            for k, w in self.graph.all_out_edges_of_node(v.key).items():
+                n = nodes[k]
+                weight_from_src = v.tag + w
+                if weight_from_src < n.tag:
+                    heapq.heappush(q, n)
+                    n.tag = weight_from_src
+                    prev[n.key] = v.key
+        if nodes[dst].tag == math.inf:
+            return None
+        path = []
+        p = dst
+        while p != -1:
+            path.append(nodes[p])
+            p = prev[p]
+        path.reverse()
+        return nodes[dst].tag, path
 
     def connected_component(self, id1: int) -> list:
         """
@@ -115,3 +147,13 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
+
+
+if __name__ == '__main__':
+    qu = []
+    for i in range(20):
+        heapq.heappush(qu, NodeData(i, random()))
+
+    while qu:
+        print(heapq.heappop(qu))
+

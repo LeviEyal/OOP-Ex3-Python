@@ -1,4 +1,3 @@
-
 class EdgeData(object):
     def __init__(self, src, dst, w):
         self.src = src
@@ -43,4 +42,10 @@ class NodeData(object):
             self.position = None
 
     def __repr__(self):
-        return "#{} pos:{}".format(self.key, self.position)
+        return "#{}".format(self.key)
+
+    def __lt__(self, other):
+        return self.tag < other.tag
+
+    def __gt__(self, other):
+        return self.tag > other.tag

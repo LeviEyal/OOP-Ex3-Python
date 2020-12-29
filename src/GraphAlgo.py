@@ -63,8 +63,7 @@ class GraphAlgo(GraphAlgoInterface):
 
                 for node in self.graph.V.values():
                     if node.position is not None:
-                        d["Nodes"].append({"pos": str(node.position),
-                                           "id": node.key})
+                        d["Nodes"].append({"pos": str(node.position), "id": node.key})
                     else:
                         d["Nodes"].append({"id": node.key})
                 json.dump(d, f, ensure_ascii=False, indent=4)

@@ -20,6 +20,7 @@ class Test(TestCase):
         self.g.add_edge(4, 2, 1)
 
     def test_add_node(self):
+        print(self.g)
         self.assertEqual(6, self.g.v_size())
 
         self.assertTrue(self.g.add_node(-2))
@@ -71,6 +72,7 @@ class Test(TestCase):
         self.assertEqual(d.__repr__(), self.g.get_all_v().__repr__())
 
     def test_all_in_edges_of_node(self):
+        print(self.g.all_in_edges_of_node(1))
         self.assertIsNotNone(self.g.all_in_edges_of_node(1))
         self.assertIsNotNone(self.g.all_in_edges_of_node(2))
         self.assertIsNotNone(self.g.all_in_edges_of_node(3))
@@ -81,6 +83,7 @@ class Test(TestCase):
         self.assertIsNone(self.g.all_in_edges_of_node(-1))
 
     def test_all_out_edges_of_node(self):
+        print(self.g.all_out_edges_of_node(1))
         self.assertIsNotNone(self.g.all_out_edges_of_node(1))
         self.assertIsNotNone(self.g.all_out_edges_of_node(2))
         self.assertIsNotNone(self.g.all_out_edges_of_node(3))

@@ -1,3 +1,4 @@
+import random
 from unittest import TestCase
 
 from src.DiGraph import DiGraph
@@ -62,32 +63,44 @@ class TestGraphAlgo(TestCase):
         self.assertIsNone(self.ga.shortest_path(7, 1))
         self.assertIsNone(self.ga.shortest_path(1, 20))
 
-    # def test_connected_component(self):
-    #     self.fail()
-    #
+    def test_connected_component(self):
+        self.ga.graph = g1
+        for j in range(1, 9):
+            print(self.ga.connected_component(j))
+
     def test_connected_components(self):
-        g = DiGraph()
-        for i in range(1, 9):
-            g.add_node(i)
-        g.add_edge(1, 2, 1)
-        g.add_edge(2, 3, 1)
-        g.add_edge(3, 4, 1)
-        g.add_edge(4, 8, 1)
-        g.add_edge(8, 4, 1)
-        g.add_edge(4, 3, 1)
-        g.add_edge(8, 7, 1)
-        g.add_edge(6, 7, 1)
-        g.add_edge(7, 6, 1)
-        g.add_edge(2, 6, 1)
-        g.add_edge(5, 6, 1)
-        g.add_edge(2, 5, 1)
-        g.add_edge(5, 1, 1)
-        g.add_edge(5, 6, 1)
-        self.ga.graph = g
+        self.ga.graph = g1
         sccs = self.ga.connected_components()
         self.assertEqual([[7, 6], [3, 4, 8], [2, 1, 5]], sccs)
 
+    def test_plot_graph(self):
+        self.ga.graph = rg
+        self.ga.plot_graph()
 
-    # def test_plot_graph(self):
-    #     self.fail()
 
+# ========================== Graph 1 ===========================
+g1 = DiGraph()
+for i in range(1, 9):
+    g1.add_node(i)
+g1.add_edge(1, 2, 1)
+g1.add_edge(2, 3, 1)
+g1.add_edge(3, 4, 1)
+g1.add_edge(4, 8, 1)
+g1.add_edge(8, 4, 1)
+g1.add_edge(4, 3, 1)
+g1.add_edge(8, 7, 1)
+g1.add_edge(6, 7, 1)
+g1.add_edge(7, 6, 1)
+g1.add_edge(2, 6, 1)
+g1.add_edge(5, 6, 1)
+g1.add_edge(2, 5, 1)
+g1.add_edge(5, 1, 1)
+g1.add_edge(5, 6, 1)
+
+# ========================== Random Graph ===========================
+rg = DiGraph()
+n = 20
+for i in range(n):
+    rg.add_node(i)
+for i in range(n*3):
+    rg.add_edge(random.randint(0, n), random.randint(0, n), random.randint(1, 10))

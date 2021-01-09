@@ -60,6 +60,9 @@ class DiGraph(GraphInteface):
             return True
         return False
 
+    def get_node(self, key: int) -> NodeData:
+        return self.V[key]
+
     def add_edge(self, src: int, dst: int, w: float) -> bool:
         """
         Adds an edge to the graph.
@@ -134,11 +137,13 @@ class DiGraph(GraphInteface):
         for key in self.V.keys():
             s += "{}:\n".format(self.V[key])
             s += "\t To:\t"
-            for w in self.all_in_edges_of_node(key).values():
+            for w in self.all_in_edges_of_node(key).keys():
                 s += str(w)
+                s += ", "
             s += "\n"
             s += "\t from:\t"
-            for w in self.all_out_edges_of_node(key).values():
+            for w in self.all_out_edges_of_node(key).keys():
                 s += str(w)
+                s += ", "
             s += "\n"
         return s

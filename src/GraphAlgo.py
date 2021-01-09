@@ -1,7 +1,11 @@
 import json
 import math
+import random
 from typing import List
 from queue import PriorityQueue
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 from DiGraph import DiGraph
 from src import GraphInterface
@@ -104,12 +108,12 @@ class GraphAlgo(GraphAlgoInterface):
         nodes = self.graph.get_all_v()
         if src not in nodes or dst not in nodes:
             return None
+
+        prev = {src: -1}
         q = PriorityQueue()
-        prev = {}
         q.put(nodes[src])
-        prev[src] = -1
-        for n in nodes.values():
-            n.tag = math.inf
+        self.set_all_nodes(math.inf)
+
         nodes[src].tag = 0
         while not q.empty():
             v = q.get()
@@ -131,49 +135,53 @@ class GraphAlgo(GraphAlgoInterface):
         return nodes[dst].tag, path
 
 # =========================================================================================
+    def connected_components(self) -> List[list]:
+        """
+        Finds all the Strongly Connected Component(SCC) in the graph.
+        @return: The list all SCC
+        """
+        visited = []
+        ans = []
+        for n in self.graph.V.keys():
+            if n not in visited:
+                scc = self.connected_component(n)
+                visited.extend(scc)
+                ans.append(scc)
+        return ans
+
+# =========================================================================================
     def connected_component(self, key: int) -> list:
         """
         Finds the Strongly Connected Component(SCC) that node id1 is a part of.
         @param key: The node id
         @return: The list of nodes in the SCC
         """
+        bfs_out = self.BFS(key, False)
+        bfs_in = self.BFS(key, True)
+        return list(set(bfs_out) & set(bfs_in))
 
 # =========================================================================================
-    def connected_components(self) -> List[list]:
-        """
-        Finds all the Strongly Connected Component(SCC) in the graph.
-        @return: The list all SCC
-        """
-        sccs = []
-        finish = []
-        self.set_all_tags(NOT_VISITED)
+    def BFS(self, s: int, flag: bool) -> list:
+        visited = {i: False for i in self.graph.V.keys()}
+        visited[s] = True
+        queue = [s]
+        t = [s]
+        while queue:
+            current = queue.pop()
+            if flag:
+                p = self.graph.all_out_edges_of_node(current).keys()
+            else:
+                p = self.graph.all_in_edges_of_node(current).keys()
 
-        for k in self.graph.get_all_v().keys():
-            if self.graph.V[k].tag == NOT_VISITED:
-                self.DFS(k, finish)
+            for u in p:
+                if not visited[u]:
+                    visited[u] = True
+                    queue.append(u)
+                    t.append(u)
+        return t
 
-        self.set_all_tags(NOT_VISITED)
-        finish.reverse()
-        while finish:
-            k = finish.pop()
-            if self.graph.V[k].tag == NOT_VISITED:
-                t = []
-                self.DFS(k, t)
-                sccs.append(t)
-        print(sccs)
-        return sccs
-
-    def DFS(self, key, finish):
-        """
-        Recursive DFS traverse algorithm
-        """
-        self.graph.V[key].tag = VISITED
-        for n in self.graph.all_out_edges_of_node(key):
-            if self.graph.V[n].tag == NOT_VISITED:
-                self.DFS(self.graph.V[n].key, finish)
-        finish.append(key)
-
-    def set_all_tags(self, t):
+# =========================================================================================
+    def set_all_nodes(self, t):
         for n in self.graph.get_all_v().values():
             n.tag = t
 
@@ -185,3 +193,29 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
+        g = self.get_graph()
+        for key in g.get_all_v().keys():
+            for k, w in g.all_out_edges_of_node(key).items():
+                r = 0.0001
+                x1 = g.get_node(key).position[0]
+                y1 = g.get_node(key).position[1]
+                x2 = g.get_node(k).position[0]
+                y2 = g.get_node(k).position[1]
+                # print(x1,x2,y1,y2)
+                dir_x = (x1-x2)/math.sqrt((x1-x2)**2 + (y1-y2)**2)
+                dir_y = (y1-y2)/math.sqrt((x1-x2)**2 + (y1-y2)**2)
+                x1 = dir_x*(-r) + x1
+                y1 = dir_y*(-r) + y1
+                x2 = dir_x*r + x2
+                y2 = dir_y*r + y2
+
+                plt.arrow(x1, y1, (x2-x1), (y2-y1),
+                          length_includes_head=True, width=0.000003, head_width=0.00015)
+
+        for node in g.get_all_v().values():
+            if node.position is None:
+                node.position = (random.uniform(0, 5), random.uniform(0, 5), 0)
+                # print(node.position)
+            plt.plot(node.position[0], node.position[1], 'or', markersize=9, data="d")
+            # plt.text(node.position[0], node.position[1], str(node.key))
+        plt.show()

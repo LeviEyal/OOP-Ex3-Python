@@ -1,3 +1,5 @@
+import random
+
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
 
@@ -7,8 +9,8 @@ def check():
         This file represents a simple function name tester.
         Make sure you run this example to check your naming.
         """
-    check0()
-    check1()
+    # check0()
+    # check1()
     check2()
 
 
@@ -60,20 +62,30 @@ def check2():
     g_algo = GraphAlgo()
     file = '../data/A5'
     g_algo.load_from_json(file)
-    g_algo.get_graph().remove_edge(13, 14)
-    g_algo.save_to_json(file + "_edited")
-    dist, path = g_algo.shortest_path(1, 7)
-    print(dist, path)
-    dist, path = g_algo.shortest_path(47, 19)
-    print(dist, path)
-    dist, path = g_algo.shortest_path(20, 2)
-    print(dist, path)
-    # dist, path = g_algo.shortest_path(2, 20)
+    # g_algo.get_graph().remove_edge(13, 14)
+    # g_algo.save_to_json(file + "_edited")
+    # dist, path = g_algo.shortest_path(1, 7)
     # print(dist, path)
-    print(g_algo.connected_component(0))
-    print(g_algo.connected_components())
+    # dist, path = g_algo.shortest_path(47, 19)
+    # print(dist, path)
+    # dist, path = g_algo.shortest_path(20, 2)
+    # print(dist, path)
+    # # dist, path = g_algo.shortest_path(2, 20)
+    # # print(dist, path)
+    # print(g_algo.connected_component(0))
+    # print(g_algo.connected_components())
     g_algo.plot_graph()
 
 
 if __name__ == '__main__':
     check()
+    rg = DiGraph()
+    n = 1000
+    for i in range(n):
+        rg.add_node(i)
+    for i in range(n * 3):
+        rg.add_edge(random.randint(0, n), random.randint(0, n), random.randint(1, 10))
+    ga = GraphAlgo()
+    ga.graph = rg
+    print(ga.connected_components())
+    # ga.plot_graph()

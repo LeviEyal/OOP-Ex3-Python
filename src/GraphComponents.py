@@ -37,7 +37,7 @@ class NodeData(object):
         self.info = info
         self.weight = weight
         if pos is not None:
-            self.position = GeoLocation(pos)
+            self.position = pos
         else:
             self.position = None
 

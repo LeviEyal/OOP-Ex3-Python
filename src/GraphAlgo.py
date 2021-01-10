@@ -2,9 +2,7 @@ import heapq
 import json
 import math
 import random
-from heapq import heappush
 from typing import List
-from queue import PriorityQueue
 
 import matplotlib.pyplot as plt
 
@@ -88,11 +86,14 @@ class GraphAlgo(GraphAlgoInterface):
         @return: The distance of the path, the path as a list
         More info:
         https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+
         """
+        # ------------------ Pre checks: ------------------ #
         nodes = self.graph.get_all_v()
         if src not in nodes or dst not in nodes:
             return None
 
+        # ------------------- Dijkstra: ------------------- #
         prev = {src: -1}
         dist = {i: math.inf for i in nodes.keys()}
         dist[src] = 0
@@ -106,10 +107,9 @@ class GraphAlgo(GraphAlgoInterface):
                     prev[u] = v
                     heapq.heappush(q, (dist[u], u))
             if v == dst:
-                print("break")
                 break
 
-        # restoring the path:
+        # -------------- Retrieving the path: -------------- #
         if dist[dst] == math.inf:
             return None
         path = []

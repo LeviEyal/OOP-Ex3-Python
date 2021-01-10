@@ -78,14 +78,19 @@ def check2():
 
 
 if __name__ == '__main__':
-    check()
-    rg = DiGraph()
-    n = 1000
-    for i in range(n):
-        rg.add_node(i)
-    for i in range(n * 3):
-        rg.add_edge(random.randint(0, n), random.randint(0, n), random.randint(1, 10))
-    ga = GraphAlgo()
-    ga.graph = rg
-    print(ga.connected_components())
+    # check()
+    # rg = DiGraph()
+    # n = 1000
+    # for i in range(n):
+    #     rg.add_node(i)
+    # for i in range(n * 3):
+    #     rg.add_edge(random.randint(0, n), random.randint(0, n), random.randint(1, 10))
+    # ga = GraphAlgo()
+    # ga.graph = rg
+    # print(ga.connected_components())
     # ga.plot_graph()
+    t = dict()
+    t[1] = 3
+    if 1 in t:
+        t[1] += 1
+    print(t)

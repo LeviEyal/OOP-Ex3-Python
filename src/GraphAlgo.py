@@ -5,14 +5,10 @@ from typing import List
 from queue import PriorityQueue
 
 import matplotlib.pyplot as plt
-import numpy as np
 
 from DiGraph import DiGraph
 from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
-
-NOT_VISITED = 0
-VISITED = 1
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -26,7 +22,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         return self.graph
 
-# =========================================================================================
+    # =========================================================================================
     def load_from_json(self, file_name: str) -> bool:
         """
         Loads a graph from a json file.
@@ -54,12 +50,12 @@ class GraphAlgo(GraphAlgoInterface):
         finally:
             f.close()
 
-# =========================================================================================
+    # =========================================================================================
     def save_to_json(self, file_name: str) -> bool:
         """
         Saves the graph in JSON format to a file
         @param file_name: The path to the out file
-        @return: True if the save was successful, Flase o.w.
+        @return: True if the save was successful, False o.w.
         """
         with open('../data/' + file_name, 'w', encoding='utf-8') as f:
             try:
@@ -81,27 +77,13 @@ class GraphAlgo(GraphAlgoInterface):
             finally:
                 f.close()
 
-# =========================================================================================
+    # =========================================================================================
     def shortest_path(self, src: int, dst: int) -> (float, list):
         """
         Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
         @param src: The start node id
         @param dst: The end node id
         @return: The distance of the path, the path as a list
-
-        Example:
-#      >>> from GraphAlgo import GraphAlgo
-#       >>> g_algo = GraphAlgo()
-#        >>> g_algo.addNode(0)
-#        >>> g_algo.addNode(1)
-#        >>> g_algo.addNode(2)
-#        >>> g_algo.addEdge(0,1,1)
-#        >>> g_algo.addEdge(1,2,4)
-#        >>> g_algo.shortestPath(0,1)
-#        (1, [0, 1])
-#        >>> g_algo.shortestPath(0,2)
-#        (5, [0, 1, 2])
-
         More info:
         https://en.wikipedia.org/wiki/Dijkstra's_algorithm
         """
@@ -110,57 +92,56 @@ class GraphAlgo(GraphAlgoInterface):
             return None
 
         prev = {src: -1}
+        tags = {i: math.inf for i in nodes.keys()}
+        tags[src] = 0
         q = PriorityQueue()
-        q.put(nodes[src])
-        self.set_all_nodes(math.inf)
-
-        nodes[src].tag = 0
+        q.put(src)
         while not q.empty():
             v = q.get()
-            for k, w in self.graph.all_out_edges_of_node(v.key).items():
-                n = nodes[k]
-                weight_from_src = v.tag + w
-                if weight_from_src < n.tag:
-                    q.put(n)
-                    n.tag = weight_from_src
-                    prev[n.key] = v.key
-        if nodes[dst].tag == math.inf:
+            for u, w in self.graph.all_out_edges_of_node(v).items():
+                weight_from_src = tags[v] + w
+                if weight_from_src < tags[u]:
+                    q.put(u)
+                    tags[u] = weight_from_src
+                    prev[u] = v
+
+        # restoring the path:
+        if tags[dst] == math.inf:
             return None
         path = []
         p = dst
         while p != -1:
-            path.append(nodes[p])
+            path.insert(0, p)
             p = prev[p]
-        path.reverse()
-        return nodes[dst].tag, path
+        return tags[dst], path
 
-# =========================================================================================
+    # =========================================================================================
     def connected_components(self) -> List[list]:
         """
         Finds all the Strongly Connected Component(SCC) in the graph.
         @return: The list all SCC
         """
-        visited = []
         ans = []
-        for n in self.graph.V.keys():
-            if n not in visited:
-                scc = self.connected_component(n)
-                visited.extend(scc)
-                ans.append(scc)
+        t = list(self.graph.V.keys())
+        while t:
+            scc = self.connected_component(t[0])
+            for i in scc:
+                t.remove(i)
+            ans.append(scc)
         return ans
 
-# =========================================================================================
+    # =========================================================================================
     def connected_component(self, key: int) -> list:
         """
         Finds the Strongly Connected Component(SCC) that node id1 is a part of.
         @param key: The node id
         @return: The list of nodes in the SCC
         """
-        bfs_out = self.BFS(key, False)
-        bfs_in = self.BFS(key, True)
-        return list(set(bfs_out) & set(bfs_in))
+        bfs_in = self.BFS(key, False)
+        bfs_out = self.BFS(key, True)
+        return list(set(bfs_in) & set(bfs_out))
 
-# =========================================================================================
+    # =========================================================================================
     def BFS(self, s: int, flag: bool) -> list:
         visited = {i: False for i in self.graph.V.keys()}
         visited[s] = True
@@ -180,12 +161,7 @@ class GraphAlgo(GraphAlgoInterface):
                     t.append(u)
         return t
 
-# =========================================================================================
-    def set_all_nodes(self, t):
-        for n in self.graph.get_all_v().values():
-            n.tag = t
-
-# =========================================================================================
+    # =========================================================================================
     def plot_graph(self) -> None:
         """
         Plots the graph.
@@ -202,14 +178,14 @@ class GraphAlgo(GraphAlgoInterface):
                 x2 = g.get_node(k).position[0]
                 y2 = g.get_node(k).position[1]
                 # print(x1,x2,y1,y2)
-                dir_x = (x1-x2)/math.sqrt((x1-x2)**2 + (y1-y2)**2)
-                dir_y = (y1-y2)/math.sqrt((x1-x2)**2 + (y1-y2)**2)
-                x1 = dir_x*(-r) + x1
-                y1 = dir_y*(-r) + y1
-                x2 = dir_x*r + x2
-                y2 = dir_y*r + y2
+                dir_x = (x1 - x2) / math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+                dir_y = (y1 - y2) / math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+                x1 = dir_x * (-r) + x1
+                y1 = dir_y * (-r) + y1
+                x2 = dir_x * r + x2
+                y2 = dir_y * r + y2
 
-                plt.arrow(x1, y1, (x2-x1), (y2-y1),
+                plt.arrow(x1, y1, (x2 - x1), (y2 - y1),
                           length_includes_head=True, width=0.000003, head_width=0.00015)
 
         for node in g.get_all_v().values():

@@ -1,6 +1,8 @@
+import heapq
 import json
 import math
 import random
+from heapq import heappush
 from typing import List
 from queue import PriorityQueue
 
@@ -92,28 +94,30 @@ class GraphAlgo(GraphAlgoInterface):
             return None
 
         prev = {src: -1}
-        tags = {i: math.inf for i in nodes.keys()}
-        tags[src] = 0
-        q = PriorityQueue()
-        q.put(src)
-        while not q.empty():
-            v = q.get()
+        dist = {i: math.inf for i in nodes.keys()}
+        dist[src] = 0
+        q = []
+        heapq.heappush(q, (0, src))
+        while q:
+            v = heapq.heappop(q)[1]
             for u, w in self.graph.all_out_edges_of_node(v).items():
-                weight_from_src = tags[v] + w
-                if weight_from_src < tags[u]:
-                    q.put(u)
-                    tags[u] = weight_from_src
+                if dist[u] > dist[v] + w:
+                    dist[u] = dist[v] + w
                     prev[u] = v
+                    heapq.heappush(q, (dist[u], u))
+            if v == dst:
+                print("break")
+                break
 
         # restoring the path:
-        if tags[dst] == math.inf:
+        if dist[dst] == math.inf:
             return None
         path = []
         p = dst
         while p != -1:
             path.insert(0, p)
             p = prev[p]
-        return tags[dst], path
+        return dist[dst], path
 
     # =========================================================================================
     def connected_components(self) -> List[list]:

@@ -51,12 +51,12 @@ class TestGraphAlgo(TestCase):
         g.add_edge(2, 6, 5.6)
         self.ga.graph = g
 
-        self.assertEqual("(15.1, [#4, #9, #7, #6])", str(self.ga.shortest_path(4, 6)))
-        self.assertEqual("(9.2, [#1, #2, #6, #7])", str(self.ga.shortest_path(1, 7)))
-        self.assertEqual("(17.080000000000002, [#3, #4, #9, #7, #6])", str(self.ga.shortest_path(3, 6)))
-        self.assertEqual("(0, [#1])", str(self.ga.shortest_path(1, 1)))
-        self.assertEqual("(5.6, [#2, #6])", str(self.ga.shortest_path(2, 6)))
-        self.assertEqual("(12.0, [#4, #9, #7])", str(self.ga.shortest_path(4, 7)))
+        self.assertEqual("(15.1, [4, 9, 7, 6])", str(self.ga.shortest_path(4, 6)))
+        self.assertEqual("(9.2, [1, 2, 6, 7])", str(self.ga.shortest_path(1, 7)))
+        self.assertEqual("(17.080000000000002, [3, 4, 9, 7, 6])", str(self.ga.shortest_path(3, 6)))
+        self.assertEqual("(0, [1])", str(self.ga.shortest_path(1, 1)))
+        self.assertEqual("(5.6, [2, 6])", str(self.ga.shortest_path(2, 6)))
+        self.assertEqual("(12.0, [4, 9, 7])", str(self.ga.shortest_path(4, 7)))
         self.assertIsNone(self.ga.shortest_path(0, 3))
         self.assertIsNone(self.ga.shortest_path(20, 4))
         self.assertIsNone(self.ga.shortest_path(8, 4))

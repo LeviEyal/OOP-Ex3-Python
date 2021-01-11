@@ -72,7 +72,7 @@ would be represented:
 | :------ |:-------------| :---------:|
 |.load_from_json(file_name)|Loads a graph from a json file.|O(V+E)|
 |.save_to_json(file_name)|Saves the graph in JSON format to a file|O(V+E)|
-|.shortest_path(src, dst)|Returns the shortest path from node src to node dst using Dijkstra's Algorithm||
-|.connected_component(key)|Finds the Strongly Connected Component(SCC) that node id1 is a part of.||
-|.connected_components()|Finds all the Strongly Connected Component(SCC) in the graph.||
-|.plot_graph()|Plots the graph. If the nodes have a position, the nodes will be placed there. Otherwise, they will be placed in a random||
+|.shortest_path(src, dst)|Returns the shortest path from node src to node dst using Dijkstra's Algorithm|O(V+E)|
+|.connected_component(key)|Finds the Strongly Connected Component(SCC) that node id1 is a part of.|O(V+E)|
+|.connected_components()|Finds all the Strongly Connected Component(SCC) in the graph.|O(V*(V+E))|
+|.plot_graph()|Plots the graph. If the nodes have a position, the nodes will be placed there. Otherwise, they will be placed in a random|O(V+E)|

@@ -1,8 +1,8 @@
-from src.GraphInterface import GraphInteface
+from src.GraphInterface import GraphInterface
 from src.GraphComponents import NodeData
 
 
-class DiGraph(GraphInteface):
+class DiGraph(GraphInterface):
 
     def __init__(self):
         self.V = dict()
@@ -20,8 +20,8 @@ class DiGraph(GraphInteface):
     def add_node(self, key: int, position: tuple = None) -> bool:
         """
         Adds a node to the graph.
-        @param key: The node ID
-        @param position: The position of the node
+        @param node_id: The node ID
+        @param pos: The position of the node
         @return: True if the node was added successfully, False o.w.
 
         Note: if the node id already exists the node will not be added

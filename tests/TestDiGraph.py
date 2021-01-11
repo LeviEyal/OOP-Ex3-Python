@@ -1,3 +1,5 @@
+import json
+import pprint
 import unittest
 from unittest import TestCase
 from src.DiGraph import DiGraph
@@ -8,8 +10,10 @@ class Test(TestCase):
 
     def setUp(self) -> None:
         self.g = DiGraph()
+        self.g1 = DiGraph()
         for i in range(6):
             self.g.add_node(i)
+            self.g1.add_node(i)
         self.g.add_edge(1, 2, 1)
         self.g.add_edge(1, 3, 1)
         self.g.add_edge(1, 4, 1)
@@ -18,6 +22,14 @@ class Test(TestCase):
         self.g.add_edge(3, 1, 1)
         self.g.add_edge(4, 5, 1)
         self.g.add_edge(4, 2, 1)
+
+        self.g1.add_edge(0, 1, 3)
+        self.g1.add_edge(0, 3, 7)
+        self.g1.add_edge(0, 4, 8)
+        self.g1.add_edge(1, 2, 1)
+        self.g1.add_edge(1, 3, 4)
+        self.g1.add_edge(3, 2, 2)
+        self.g1.add_edge(4, 3, 3)
 
     def test_add_node(self):
         print(self.g)
@@ -70,6 +82,8 @@ class Test(TestCase):
     def test_get_all_v(self):
         d = {0: NodeData(0), 1: NodeData(1), 2: NodeData(2), 3: NodeData(3), 4: NodeData(4), 5: NodeData(5)}
         self.assertEqual(d.__repr__(), self.g.get_all_v().__repr__())
+        print(self.g1.Ni_in)
+        print(self.g1.Ni_out)
 
     def test_all_in_edges_of_node(self):
         print(self.g.all_in_edges_of_node(1))

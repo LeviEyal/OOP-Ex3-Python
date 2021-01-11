@@ -11,6 +11,23 @@ from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
 
 
+def intersection(list1: list, list2: list):
+    ans = []
+    list1.sort()
+    list2.sort()
+    i = j = 0
+    while i < len(list1) and j < len(list2):
+        if list1[i] < list2[j]:
+            i += 1
+        elif list1[i] > list2[j]:
+            j += 1
+        else:
+            ans.append(list1[i])
+            i += 1
+            j += 1
+    return ans
+
+
 class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self):
@@ -83,7 +100,7 @@ class GraphAlgo(GraphAlgoInterface):
         Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
         @param src: The start node id
         @param dst: The end node id
-        @return: The distance of the path, the path as a list
+        @return: The distance of the path, a list of the nodes ids that the path goes through
         More info:
         https://en.wikipedia.org/wiki/Dijkstra's_algorithm
 
@@ -126,11 +143,11 @@ class GraphAlgo(GraphAlgoInterface):
         @return: The list all SCC
         """
         ans = []
-        t = list(self.graph.V.keys())
+        t = dict.fromkeys(self.graph.V.keys())
         while t:
-            scc = self.connected_component(t[0])
+            scc = self.connected_component(list(t.keys())[0])
             for i in scc:
-                t.remove(i)
+                del t[i]
             ans.append(scc)
         return ans
 
@@ -140,30 +157,34 @@ class GraphAlgo(GraphAlgoInterface):
         Finds the Strongly Connected Component(SCC) that node id1 is a part of.
         @param key: The node id
         @return: The list of nodes in the SCC
+        Notes:
+        If the graph is None or id1 is not in the graph, the function should return an empty list []
         """
+        if self.graph is None or key not in self.graph.V.keys():
+            return []
         bfs_in = self.BFS(key, False)
         bfs_out = self.BFS(key, True)
-        return list(set(bfs_in) & set(bfs_out))
+        return intersection(bfs_in, bfs_out)
 
     # =========================================================================================
     def BFS(self, s: int, flag: bool) -> list:
         visited = {i: False for i in self.graph.V.keys()}
         visited[s] = True
         queue = [s]
-        t = [s]
+        ans = [s]
         while queue:
-            current = queue.pop()
+            v = queue.pop()
             if flag:
-                p = self.graph.all_out_edges_of_node(current).keys()
+                v_adj = self.graph.all_out_edges_of_node(v).keys()
             else:
-                p = self.graph.all_in_edges_of_node(current).keys()
+                v_adj = self.graph.all_in_edges_of_node(v).keys()
 
-            for u in p:
+            for u in v_adj:
                 if not visited[u]:
                     visited[u] = True
                     queue.append(u)
-                    t.append(u)
-        return t
+                    ans.append(u)
+        return ans
 
     # =========================================================================================
     def plot_graph(self) -> None:

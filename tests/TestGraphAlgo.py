@@ -64,7 +64,10 @@ class TestGraphAlgo(TestCase):
         self.assertIsNone(self.ga.shortest_path(1, 20))
 
     def test_connected_component(self):
+        self.ga.graph = None
+        self.assertEqual([], self.ga.connected_component(1))
         self.ga.graph = g1
+        self.assertEqual([], self.ga.connected_component(10))
         for j in range(1, 9):
             print(self.ga.connected_component(j))
 

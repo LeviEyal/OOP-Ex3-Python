@@ -1,23 +1,23 @@
 # OOP-Ex3-Python
 מטלה רביעית ואחרונה בקורס תכנות מונחה עצמים - סמסטר א' תשפ"א דצמבר 2020
 
-About this project:
+## About the project
 This project is an implementation of a weighted directed graph accompanied by 
 different graphs algorithms implemented in Python. 
 A graph is represented in adjacency list and and each one contains a list of vertices and a list of weithed edges.
 
-# The graph representation:
+# The graph representation
 The graph represented by adjacency list and in particular with 3 dictionaries:
 - vertices dictionary
-- a dictionary {src: {dst1:w1, dst2:w2...} , ...}
-- a dictionary {dst: {src1:w1, src2:w2...} , ...}
+- "out-edges" dictionary {src: {dst1:w1, dst2:w2...} , ...}
+- "in-edges" dictionary {dst: {src1:w1, src2:w2...} , ...}
 
 for example the following graph:<br>
-![digraph-1](https://user-images.githubusercontent.com/48846533/104158293-af6a3c00-53f5-11eb-9874-90bbd8f9df80.png)
+<img src="https://user-images.githubusercontent.com/48846533/104158293-af6a3c00-53f5-11eb-9874-90bbd8f9df80.png" alt="drawing" width="400"/>
 
 would be represented:
 
-####vertices dictionary:
+#### vertices dictionary:
 ```
 {
     0: NodeData#0,
@@ -27,7 +27,7 @@ would be represented:
     4: NodeData#4
 }
 ```
-####out edges dictionary:
+#### out edges dictionary:
 ```
 {
     0: {1: 3, 3: 7, 4: 8},
@@ -39,7 +39,7 @@ would be represented:
 }
 ```
 
-####in edges dictionary:
+#### in edges dictionary:
 
 ```
 {
@@ -51,7 +51,7 @@ would be represented:
 }
 ```
 
-# DiGraph class summary:
+# DiGraph class summary
 | Method  | Description  | Complexity |
 | :------ |:-------------| :---------:|
 | .add_node(key, position)| adds a vertex to the graph. | O(1) |
@@ -67,7 +67,7 @@ would be represented:
 |.repr()|Returns a string representation of the graph|O(V+E)|
 
 
-# GraphAlgo class summary:
+# GraphAlgo class summary
 | Method  | Description  | Complexity |
 | :------ |:-------------| :---------:|
 |.load_from_json(file_name)|Loads a graph from a json file.|O(V+E)|

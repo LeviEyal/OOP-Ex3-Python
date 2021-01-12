@@ -8,6 +8,7 @@ class DiGraph(GraphInterface):
         self.V = dict()
         self.Ni_out = dict()
         self.Ni_in = dict()
+        self._keys_set = set()
         self.__nodeSize = 0
         self.__edgeSize = 0
         self.__mc = 0
@@ -20,8 +21,8 @@ class DiGraph(GraphInterface):
     def add_node(self, key: int, position: tuple = None) -> bool:
         """
         Adds a node to the graph.
-        @param node_id: The node ID
-        @param pos: The position of the node
+        @param key: The node ID
+        @param position: The position of the node
         @return: True if the node was added successfully, False o.w.
 
         Note: if the node id already exists the node will not be added
@@ -30,6 +31,7 @@ class DiGraph(GraphInterface):
             self.V[key] = NodeData(key, pos=position)
             self.Ni_in[key] = {}
             self.Ni_out[key] = {}
+            self._keys_set.add(key)
             self.__mc += 1
             self.__nodeSize += 1
             return True
@@ -52,6 +54,7 @@ class DiGraph(GraphInterface):
                 if key in self.Ni_out[k].keys():
                     del self.Ni_out[k][key]
 
+            self._keys_set.remove(key)
             self.V.pop(key)
             self.Ni_in.pop(key)
             self.Ni_out.pop(key)
@@ -147,3 +150,6 @@ class DiGraph(GraphInterface):
                 s += ", "
             s += "\n"
         return s
+
+    def keysSet(self):
+        return self._keys_set

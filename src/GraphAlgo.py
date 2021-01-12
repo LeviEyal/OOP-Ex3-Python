@@ -11,23 +11,6 @@ from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
 
 
-def intersection(list1: list, list2: list):
-    ans = []
-    list1.sort()
-    list2.sort()
-    i = j = 0
-    while i < len(list1) and j < len(list2):
-        if list1[i] < list2[j]:
-            i += 1
-        elif list1[i] > list2[j]:
-            j += 1
-        else:
-            ans.append(list1[i])
-            i += 1
-            j += 1
-    return ans
-
-
 class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self):
@@ -105,12 +88,12 @@ class GraphAlgo(GraphAlgoInterface):
         https://en.wikipedia.org/wiki/Dijkstra's_algorithm
 
         """
-        # ------------------ Pre checks: ------------------ #
+        # ------------------ Pre checks: ------------------- #
         nodes = self.graph.get_all_v()
         if src not in nodes or dst not in nodes:
             return None
 
-        # ------------------- Dijkstra: ------------------- #
+        # ----------------- Dijkstra core: ----------------- #
         prev = {src: -1}
         dist = {i: math.inf for i in nodes.keys()}
         dist[src] = 0
@@ -142,14 +125,13 @@ class GraphAlgo(GraphAlgoInterface):
         Finds all the Strongly Connected Component(SCC) in the graph.
         @return: The list all SCC
         """
-        ans = []
-        t = dict.fromkeys(self.graph.V.keys())
+        sccs = []
+        t = self.graph.keysSet()
         while t:
-            scc = self.connected_component(list(t.keys())[0])
-            for i in scc:
-                del t[i]
-            ans.append(scc)
-        return ans
+            scc = self.connected_component(t.pop())
+            sccs.append(scc)
+            t -= set(scc)
+        return sccs
 
     # =========================================================================================
     def connected_component(self, key: int) -> list:
@@ -162,29 +144,24 @@ class GraphAlgo(GraphAlgoInterface):
         """
         if self.graph is None or key not in self.graph.V.keys():
             return []
-        bfs_in = self.BFS(key, False)
-        bfs_out = self.BFS(key, True)
-        return intersection(bfs_in, bfs_out)
+        bfs_in = self.BFS(key)
+        bfs_out = self.BFS(key, inverted=True)
+        return list(bfs_out & bfs_in)
 
     # =========================================================================================
-    def BFS(self, s: int, flag: bool) -> list:
-        visited = {i: False for i in self.graph.V.keys()}
-        visited[s] = True
-        queue = [s]
-        ans = [s]
-        while queue:
-            v = queue.pop()
-            if flag:
-                v_adj = self.graph.all_out_edges_of_node(v).keys()
-            else:
-                v_adj = self.graph.all_in_edges_of_node(v).keys()
+    def BFS(self, s: int, inverted: bool = False) -> set:
+        q = [s]
+        visited = {s}
+        while q:
+            v = q.pop()
+            v_adjs = self.graph.all_out_edges_of_node(v).keys() if inverted \
+                else self.graph.all_in_edges_of_node(v).keys()
 
-            for u in v_adj:
-                if not visited[u]:
-                    visited[u] = True
-                    queue.append(u)
-                    ans.append(u)
-        return ans
+            for u in v_adjs:
+                if u not in visited:
+                    q.append(u)
+                    visited.add(u)
+        return visited
 
     # =========================================================================================
     def plot_graph(self) -> None:

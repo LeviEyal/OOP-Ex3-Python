@@ -76,3 +76,7 @@ would be represented:
 |.connected_component(key)|Finds the Strongly Connected Component(SCC) that node id1 is a part of.|O(V+E)|
 |.connected_components()|Finds all the Strongly Connected Component(SCC) in the graph.|O(V*(V+E))|
 |.plot_graph()|Plots the graph. If the nodes have a position, the nodes will be placed there. Otherwise, they will be placed in a random|O(V+E)|
+
+# Graph plotting examples
+<img src="https://user-images.githubusercontent.com/48846533/104601238-a80b9280-5682-11eb-874f-ff61cf4d89ef.png" alt="drawing" width="400"/>
+<img src="https://user-images.githubusercontent.com/48846533/104601248-ac37b000-5682-11eb-8a99-0299e618933f.png" alt="drawing" width="400"/>

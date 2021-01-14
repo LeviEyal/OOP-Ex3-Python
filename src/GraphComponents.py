@@ -1,12 +1,4 @@
-# class EdgeData(object):
-#     def __init__(self, src, dst, w):
-#         self.src = src
-#         self.dst = dst
-#         self.w = w
-#         self.tag = 0
-#
-#     def __repr__(self):
-#         return "({}->{})w:{} ".format(self.src, self.dst, self.w)
+import random
 
 
 class GeoLocation(object):
@@ -39,7 +31,7 @@ class NodeData(object):
         if pos is not None:
             self.position = pos
         else:
-            self.position = None
+            self.position = (random.randint(1, 10))
 
     def __repr__(self):
         return "#{}".format(self.key)

@@ -13,8 +13,8 @@ from src.GraphAlgoInterface import GraphAlgoInterface
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self):
-        self.graph = DiGraph()
+    def __init__(self, g: DiGraph=DiGraph()):
+        self.graph = g
 
     def get_graph(self) -> GraphInterface:
         """

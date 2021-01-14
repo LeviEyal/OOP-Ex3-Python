@@ -1,9 +1,15 @@
-import json
-import pprint
+"""
+*****************************************************************************
+* Eyal Levi ID.203249073
+* OOP course 2020 - Ariel University
+* Assignment number 4
+* https://github.com/LeviEyal
+****************************************************************************
+"""
+
 import unittest
 from unittest import TestCase
-from src.DiGraph import DiGraph
-from src.GraphComponents import NodeData
+from src.DiGraph import DiGraph, NodeData
 
 
 class Test(TestCase):
@@ -45,6 +51,7 @@ class Test(TestCase):
 
     def test_remove_node(self):
         self.assertEqual(6, self.g.v_size())
+        self.assertEqual(14, self.g.get_mc())
 
         self.assertTrue(self.g.remove_node(1))
         self.assertEqual(5, self.g.v_size())
@@ -70,6 +77,7 @@ class Test(TestCase):
 
     def test_remove_edge(self):
         self.assertEqual(8, self.g.e_size())
+        self.assertEqual(14, self.g.get_mc())
 
         self.assertTrue(self.g.remove_edge(2, 5))
         self.assertEqual(7, self.g.e_size())

@@ -1,3 +1,13 @@
+"""
+*****************************************************************************
+* Eyal Levi ID.203249073
+* OOP course 2020 - Ariel University
+* Assignment number 4
+* https://github.com/LeviEyal
+****************************************************************************
+"""
+
+import math
 import random
 from unittest import TestCase
 
@@ -57,10 +67,10 @@ class TestGraphAlgo(TestCase):
         self.assertEqual("(0, [1])", str(self.ga.shortest_path(1, 1)))
         self.assertEqual("(5.6, [2, 6])", str(self.ga.shortest_path(2, 6)))
         self.assertEqual("(12.0, [4, 9, 7])", str(self.ga.shortest_path(4, 7)))
-        self.assertIsNone(self.ga.shortest_path(0, 3))
+        self.assertEqual((math.inf, []), self.ga.shortest_path(0, 3))
+        self.assertEqual((math.inf, []), self.ga.shortest_path(8, 4))
+        self.assertEqual((math.inf, []), self.ga.shortest_path(7, 1))
         self.assertIsNone(self.ga.shortest_path(20, 4))
-        self.assertIsNone(self.ga.shortest_path(8, 4))
-        self.assertIsNone(self.ga.shortest_path(7, 1))
         self.assertIsNone(self.ga.shortest_path(1, 20))
 
     def test_connected_component(self):
@@ -74,7 +84,7 @@ class TestGraphAlgo(TestCase):
     def test_connected_components(self):
         self.ga.graph = g1
         sccs = self.ga.connected_components()
-        self.assertEqual([[7, 6], [3, 4, 8], [2, 1, 5]], sccs)
+        self.assertEqual([[1, 2, 5], [8, 3, 4], [6, 7]], sccs)
 
     def test_plot_graph(self):
         self.ga.graph = rg

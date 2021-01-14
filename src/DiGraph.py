@@ -1,5 +1,26 @@
+"""
+*****************************************************************************
+* Eyal Levi ID.203249073
+* OOP course 2020 - Ariel University
+* Assignment number 4
+* https://github.com/LeviEyal
+****************************************************************************
+"""
+
+import random
 from src.GraphInterface import GraphInterface
-from src.GraphComponents import NodeData
+
+
+class NodeData(object):
+    def __init__(self, key: int, pos=None):
+        self.key = key
+        if pos is None:
+            self.pos = random.randint(1, 10), random.randint(1, 10), random.randint(1, 10)
+        else:
+            self.pos = pos
+
+    def __repr__(self):
+        return "#{}".format(self.key)
 
 
 class DiGraph(GraphInterface):
@@ -18,17 +39,17 @@ class DiGraph(GraphInterface):
         """
         return self.V
 
-    def add_node(self, key: int, position: tuple = None) -> bool:
+    def add_node(self, key: int, pos: tuple = None) -> bool:
         """
         Adds a node to the graph.
         @param key: The node ID
-        @param position: The position of the node
+        @param pos: The position of the node
         @return: True if the node was added successfully, False o.w.
 
         Note: if the node id already exists the node will not be added
         """
         if key not in self.V:
-            self.V[key] = NodeData(key, pos=position)
+            self.V[key] = NodeData(key, pos=pos)
             self.Ni_in[key] = {}
             self.Ni_out[key] = {}
             self._keys_set.add(key)
@@ -139,13 +160,13 @@ class DiGraph(GraphInterface):
         s = "|V|={} , |E|={} , MC={}\n".format(self.__nodeSize, self.__edgeSize, self.__mc)
         for key in self.V.keys():
             s += "{}:\n".format(self.V[key])
-            s += "\t To:\t"
-            for w in self.all_in_edges_of_node(key).keys():
+            s += "\t |Edges-out|:\t"
+            for w in self.all_out_edges_of_node(key).keys():
                 s += str(w)
                 s += ", "
             s += "\n"
-            s += "\t from:\t"
-            for w in self.all_out_edges_of_node(key).keys():
+            s += "\t |Edges-in |:\t"
+            for w in self.all_in_edges_of_node(key).keys():
                 s += str(w)
                 s += ", "
             s += "\n"
